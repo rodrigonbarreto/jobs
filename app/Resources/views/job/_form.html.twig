@@ -1,0 +1,14 @@
+{{ form_start(form) }}
+    <div>
+        {{ form_label(form.title) }}
+        {{ form_widget(form.title, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_errors(form.title) }}
+    </div>
+    <div>
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_errors(form.description) }}
+    </div>
+<br>
+<input type="submit" class="btn-action btn-success" value={{ buttonValue }} />
+{{ form_end(form) }}

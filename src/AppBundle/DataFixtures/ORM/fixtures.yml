@@ -1,0 +1,18 @@
+AppBundle\Entity\User:
+    user_{1..10}:
+        email: user_<current()>@gmail.com
+        firstName: FNameuser<current()>
+        lastName: LNameadmin<current()>
+        plainPassword: 123123
+        roles: ['ROLE_USER']
+    user_11:
+        email: admin@gmail.com
+        firstName: admin
+        lastName: admin
+        plainPassword: 123123
+        roles: ['ROLE_ADMIN']
+AppBundle\Entity\Job:
+    job_{1..10}:
+        title: test_<current()>
+        description: sasadadsa
+        createdBy: '@user_2'

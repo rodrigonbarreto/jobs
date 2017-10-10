@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Job edit</h1>
+    <a href="{{ path('job_index') }}">Back to the list</a>
+    <br/><br/>
+    {% include "job/_form.html.twig"  with {'buttonValue': 'Edit'} %}
+    <br>
+    {{ form_start(delete_form) }}
+    <input type="submit" class="btn-danger" value="Delete">
+    {{ form_end(delete_form) }}
+
+
+
+
+{% endblock %}
