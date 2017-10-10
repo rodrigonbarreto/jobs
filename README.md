@@ -38,6 +38,10 @@ great:
 php bin/console server:run
 ```
 
+# For test run
+```
+./vendor/bin/phpunit 
+```
 
 # I created this way.
 * Admin - Can see and edit all jobs - login: admin@gmail.com - pass:123123
