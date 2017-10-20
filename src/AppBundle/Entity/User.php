@@ -59,6 +59,27 @@ class User implements UserInterface
     private $lastName;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Job", mappedBy="createdBy", cascade={"persist"}, orphanRemoval=true)
+     */
+    private $jobs;
+
+    /**
+     * @return null|string
+     */
+    public function __toString()
+    {
+        return (string) $this->email ? $this->email : '';
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -197,5 +218,54 @@ class User implements UserInterface
     public function getFullName()
     {
         return trim($this->getFirstName().' '.$this->getLastName());
+    }
+
+    /**
+     * @param $jobs
+     * @return $this
+     */
+    public function setJob($jobs)
+    {
+        if (count($jobs) > 0) {
+            foreach ($jobs as $i) {
+                $this->addJob($i);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add job
+     *
+     * @param \AppBundle\Entity\Job $job
+     *
+     * @return User
+     */
+    public function addJob(\AppBundle\Entity\Job $job)
+    {
+        $this->jobs[] = $job;
+
+        return $this;
+    }
+
+    /**
+     * Remove job
+     *
+     * @param \AppBundle\Entity\Job $job
+     */
+    public function removeJob(\AppBundle\Entity\Job $job)
+    {
+        $this->jobs->removeElement($job);
+    }
+
+    /**
+     * Get jobs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getJobs()
+    {
+        return $this->jobs;
     }
 }

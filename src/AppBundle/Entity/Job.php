@@ -64,6 +64,11 @@ class Job
      */
     private $updatedBy;
 
+    public function __toString()
+    {
+      return (string) $this->title ? $this->title : '';
+    }
+
     /**
      * Get id
      *
