@@ -1,8 +1,6 @@
 <?php
 
 namespace AppBundle\Entity;
-use AppBundle\Repository\UserJobRepository;
-use AppBundle\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -73,8 +71,21 @@ class User implements UserInterface
     public function __construct()
     {
         $this->userJobs = new ArrayCollection();
+        $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Job", mappedBy="createdBy", cascade={"persist"}, orphanRemoval=true)
+     */
+    private $jobs;
+
+    /**
+     * @return null|string
+     */
+    public function __toString()
+    {
+        return (string) $this->email ? $this->email : '';
+    }
     /**
      * @return int
      */
@@ -257,11 +268,60 @@ class User implements UserInterface
     public function checkConcern($job)
     {
         $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq('job', $job))
+            ->where(Criteria ::expr()->eq('job', $job))
             ->setMaxResults(1);
 
         $results = $this->userJobs->matching($criteria);
 
         return $results->count() ? true : false;
+    }
+
+    /**
+     * @param $jobs
+     * @return $this
+     */
+    public function setJob($jobs)
+    {
+        if (count($jobs) > 0) {
+            foreach ($jobs as $i) {
+                $this->addJob($i);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add job
+     *
+     * @param \AppBundle\Entity\Job $job
+     *
+     * @return User
+     */
+    public function addJob(\AppBundle\Entity\Job $job)
+    {
+        $this->jobs[] = $job;
+
+        return $this;
+    }
+
+    /**
+     * Remove job
+     *
+     * @param \AppBundle\Entity\Job $job
+     */
+    public function removeJob(\AppBundle\Entity\Job $job)
+    {
+        $this->jobs->removeElement($job);
+    }
+
+    /**
+     * Get jobs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getJobs()
+    {
+        return $this->jobs;
     }
 }

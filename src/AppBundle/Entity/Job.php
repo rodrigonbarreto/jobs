@@ -65,6 +65,11 @@ class Job
      */
     private $updatedBy;
 
+    public function __toString()
+    {
+      return (string) $this->title ? $this->title : '';
+    }
+
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserJob", mappedBy="job", fetch="EXTRA_LAZY", orphanRemoval=true,cascade={"persist"})
      */

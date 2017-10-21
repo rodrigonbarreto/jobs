@@ -35,3 +35,16 @@ services:
         tags:
             - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
 
+    job_admin:
+        class: AppBundle\Admin\JobAdmin
+        public: true
+        arguments: [~, AppBundle\Entity\Job, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Job }
+
+    user_admin:
+        class: AppBundle\Admin\UserAdmin
+        public: true
+        arguments: [~, AppBundle\Entity\User, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: User }
