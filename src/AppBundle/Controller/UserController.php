@@ -7,14 +7,14 @@ use AppBundle\Form\UserEditForm;
 use AppBundle\Form\UserRegistrationForm;
 use AppBundle\Security\LoginFormAuthenticator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class UserController
  * @package AppBundle\Controller
  */
-class UserController extends Controller
+class UserController extends BaseController
 {
     /**
      * @Route("/register", name="user_register")
@@ -49,9 +49,19 @@ class UserController extends Controller
 
     /**
      * @Route("/users/{id}", name="user_show")
+     *
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @param User $user
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function showAction(User $user)
     {
+        if ($this->getUser() !== $user) {
+            $this->addFlash('error', 'Sorry this is not your user');
+            return $this->redirectToRoute('user_edit', ['id' => $this->getUser()->getId()]);
+        }
+
         return $this->render('user/show.html.twig', array(
             'user' => $user
         ));
@@ -59,10 +69,20 @@ class UserController extends Controller
 
     /**
      * @Route("/users/{id}/edit", name="user_edit")
+     *
+     * @Security("has_role('ROLE_USER')")
+     * @param User $user
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function editAction(User $user, Request $request)
     {
         $form = $this->createForm(UserEditForm::class, $user);
+
+        if ($this->getUser() !== $user) {
+            $this->addFlash('error', 'Sorry this is not your user');
+            return $this->redirectToRoute('user_edit', ['id' => $this->getUser()->getId()]);
+        }
 
         $form->handleRequest($request);
         if ($form->isValid()) {

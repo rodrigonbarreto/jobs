@@ -23,7 +23,7 @@
                 </p>
                 <ul>
                     {% for job in user.userJobs %}
-                        <li><a href="{{ path('job_show', { 'slug': job.slug }) }}"> {{ job.job.title }} </a></li>
+                            <li><a href="{{ path('job_show', { 'slug': job.job.slug }) }}"> {{ job.job.title }} </a></li>
                     {% endfor %}
                 </ul>
             </div>
