@@ -10,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-
 /**
  * Class JobInterestController
  * @package AppBundle\Controller
@@ -62,10 +61,10 @@ class JobInterestController extends BaseController
                 ->findOneBy(['user' => $user, 'job' => $job]);
             $userJobService->removeUserJobInterest($userJob);
 
-            $this->addFlash('error', "NOOOO do not give up!!");
+            $this->addFlash('success', "NOOOO do not give up!!");
             return $this->redirectToRoute('job_show', ['slug' => $job->getSlug()]);
         }
 
-//        return $this->redirectToRoute('job_show', ['slug' => $job->getSlug()]);
+        return $this->redirectToRoute('job_show', ['slug' => $job->getSlug()]);
     }
 }

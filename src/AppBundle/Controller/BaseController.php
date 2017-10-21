@@ -13,7 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class BaseController extends Controller
 {
-
     /**
      * @return \Doctrine\Common\Persistence\ObjectManager|object
      */
@@ -37,5 +36,16 @@ class BaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->remove($obj);
         $em->flush();
+    }
+
+    /**
+     * @param Job $job
+     * @return bool
+     */
+    private function checkOwnerJob(Job $job) {
+        if ($this->getUser()->getId() !== $job->getUpdatedBy()) {
+            return false;
+        }
+        return true;
     }
 }
