@@ -1,6 +1,10 @@
 <?php
 
 namespace AppBundle\Entity;
+use AppBundle\Repository\UserJobRepository;
+use AppBundle\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -57,6 +61,19 @@ class User implements UserInterface
      * @ORM\Column(type="string", nullable=true)
      */
     private $lastName;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserJob", mappedBy="user")
+     */
+    private $userJobs;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->userJobs = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -197,5 +214,54 @@ class User implements UserInterface
     public function getFullName()
     {
         return trim($this->getFirstName().' '.$this->getLastName());
+    }
+
+    /**
+     * Add userJob
+     *
+     * @param UserJob $userJob
+     *
+     * @return User
+     */
+    public function addUserJob(UserJob $userJob)
+    {
+        $this->userJobs[] = $userJob;
+
+        return $this;
+    }
+
+    /**
+     * Remove userJob
+     *
+     * @param UserJob $userJob
+     */
+    public function removeUserJob(UserJob $userJob)
+    {
+        $this->userJobs->removeElement($userJob);
+    }
+
+    /**
+     * Get userJobs
+     *
+     * @return \Doctrine\Common\Collections\Collection|UserJob[]
+     */
+    public function getUserJobs()
+    {
+        return $this->userJobs;
+    }
+
+    /**
+     * @param $job
+     * @return bool
+     */
+    public function checkConcern($job)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('job', $job))
+            ->setMaxResults(1);
+
+        $results = $this->userJobs->matching($criteria);
+
+        return $results->count() ? true : false;
     }
 }

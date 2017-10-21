@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -63,6 +64,19 @@ class Job
      * @ORM\JoinColumn(referencedColumnName="id")
      */
     private $updatedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\UserJob", mappedBy="job", fetch="EXTRA_LAZY", orphanRemoval=true,cascade={"persist"})
+     */
+    private $jobUsers;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->jobUsers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -168,5 +182,51 @@ class Job
     public function setUpdatedBy(User $updatedBy)
     {
         $this->updatedBy = $updatedBy;
+    }
+
+    /**
+     * Add jobUser
+     *
+     * @param UserJob $jobUser
+     *
+     * @return Job
+     */
+    public function addJobUser(UserJob $jobUser)
+    {
+        $this->jobUsers[] = $jobUser;
+
+        if ($this->jobUsers->contains($jobUser)) {
+            return;
+        }
+
+        $this->jobUsers[] = $jobUser;
+        $jobUser->setJob($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove jobUser
+     *
+     * @param UserJob $jobUser
+     */
+    public function removeJobUser(UserJob $jobUser)
+    {
+        if (!$this->jobUsers->contains($jobUser)) {
+            return;
+        }
+
+        $this->jobUsers->removeElement($jobUser);
+        $jobUser->setJob(null);
+    }
+
+    /**
+     * Get jobUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getJobUsers()
+    {
+        return $this->jobUsers;
     }
 }

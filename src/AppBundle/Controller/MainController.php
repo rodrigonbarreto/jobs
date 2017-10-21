@@ -1,6 +1,9 @@
 <?php
 
 namespace AppBundle\Controller;
+use AppBundle\Entity\Job;
+use AppBundle\Entity\User;
+use AppBundle\Entity\UserJob;
 
 /**
  * Class MainController

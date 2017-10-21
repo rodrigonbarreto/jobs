@@ -16,3 +16,14 @@ AppBundle\Entity\Job:
         title: test_<current()>
         description: sasadadsa
         createdBy: '@user_2'
+
+AppBundle\Entity\UserJob:
+    UserJob1:
+        user: '@user_1'
+        job: '@job_1'
+    UserJob2:
+        user: '@user_1'
+        job: '@job_2'
+    UserJob3:
+        user: '@user_1'
+        job: '@job_3'

@@ -5,9 +5,9 @@
         Welcome!!
         {{ app.user ? app.user.email : '' }}!
     </h1>
-<ul>
+
+    <h1>Jobs list</h1>
     {% for job in jobs %}
-     <li> {{ job.title }} </li>
+        <h3> <a href="{{ path('job_show', { 'slug': job.slug }) }}">{{ job.title }}</a> </h3>
     {% endfor %}
-</ul>
 {% endblock %}

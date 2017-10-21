@@ -1,36 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Job</h1>
-
-    <table class="table table-bordered" >
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ job.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ job.title }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ job.description }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('job_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('job_edit', { 'slug': job.slug }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <h1> Job Description </h1>
+    {% if (app.user is not null) %}
+        {% if app.user.checkConcern(job)  %}
+            <a href="{{ path('job_remove_interest', {'job': job.id}) }}"  class="btn btn-warning remove-interest-job" /> Give Up </a>
+        {% else %}
+            <a href="{{ path('job_add_interest', {'job': job.id}) }}"  class="btn btn-primary add-interest-job" /> I born for IT </a>
+        {% endif %}
+    {% endif %}
+    <h3>{{ job.title }}</h3>
+    <br>
+    <h4><a href="{{ path('job_index') }}">Back to list Jobs</a> </h4>
 {% endblock %}
+
+

@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
  * @package AppBundle\Controller
  * @Route("job")
  *
- * @Security("has_role('ROLE_USER')")
  */
 class JobController extends BaseController
 {
@@ -26,7 +25,7 @@ class JobController extends BaseController
      */
     public function indexAction()
     {
-        $jobs = $this->getEntityManager()->getRepository(Job::class)->getJobsByUser($this->getUser());
+        $jobs = $this->getEntityManager()->getRepository(Job::class)->findAll();
 
         return $this->render('job/index.html.twig', array(
             'jobs' => $jobs,

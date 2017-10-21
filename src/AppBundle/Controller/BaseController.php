@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Job;
+use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -28,5 +30,12 @@ class BaseController extends Controller
     {
         $em = $this->getEntityManager();
       return  $em->getRepository(Job::class)->findAll();
+    }
+
+    protected function removeEntity($obj)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($obj);
+        $em->flush();
     }
 }
